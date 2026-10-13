@@ -1,19 +1,13 @@
 {
   "items": [
     {
-      "title": "YOUR_MEDIA_TITLE — placeholder talk",
+      "title": "Coming soon",
       "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
       "type": "talk",
       "date": "2025-06-01",
       "note": "Replace this sample with a real link, or delete the whole entry.",
       "embedOnMediaPage": true
     },
-    {
-      "title": "YOUR_PODCAST_TITLE — placeholder episode",
-      "url": "https://example.com/podcast/episode",
-      "type": "podcast",
-      "date": "2025-03-15",
-      "note": "Optional one-line note shown on the home page."
-    }
+   
   ]
 }

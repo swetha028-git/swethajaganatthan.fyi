@@ -50,6 +50,6 @@ Add an object to the `links` array in `site.json`:
 ```json
 {
   "label": "GitHub",
-  "url": "https://github.com/YOUR_HANDLE"
+  "url": "https://github.com/swetha028-git"
 }
 ```
