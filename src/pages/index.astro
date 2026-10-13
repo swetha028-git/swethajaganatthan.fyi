@@ -1,0 +1,91 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteConfig, mediaItems } from '../lib/content';
+import { formatDateShort } from '../lib/format';
+
+const writings = (await getCollection('writings')).sort(
+	(a, b) => b.data.date.getTime() - a.data.date.getTime(),
+);
+
+const aboutEntries = await getCollection('about');
+const aboutEntry = aboutEntries[0];
+const { Content: AboutContent } = aboutEntry ? await render(aboutEntry) : { Content: null };
+
+const description = siteConfig.intro;
+---
+
+<BaseLayout title={siteConfig.name} siteName={siteConfig.name} description={description}>
+	<header class="site-header">
+		<h1>{siteConfig.name}</h1>
+		<p class="intro">{siteConfig.intro}</p>
+		<ul class="contact">
+			{
+				siteConfig.links.map((link) => (
+					<li>
+						<a href={link.url}>{link.label}</a>
+					</li>
+				))
+			}
+		</ul>
+	</header>
+
+	<section id="about">
+		<h2>About</h2>
+		<div class="prose">
+			{AboutContent && <AboutContent />}
+		</div>
+	</section>
+
+	<section id="writings">
+		<h2>Writings</h2>
+		{
+			writings.length === 0 ? (
+				<p class="intro">No posts yet.</p>
+			) : (
+				<ul class="list-rows">
+					{
+						writings.map((post) => (
+							<li class="list-row">
+								<span class="list-row__title">
+									<a href={`/writings/${post.id}`}>{post.data.title}</a>
+								</span>
+								<time class="list-row__meta" datetime={post.data.date.toISOString()}>
+									{formatDateShort(post.data.date)}
+								</time>
+							</li>
+						))
+					}
+				</ul>
+			)
+		}
+	</section>
+
+	<section id="media">
+		<h2>Podcasts &amp; Videos</h2>
+		{
+			mediaItems.length === 0 ? (
+				<p class="intro">Nothing listed yet.</p>
+			) : (
+				<ul class="list-rows">
+					{
+						mediaItems.map((item) => (
+							<li class="list-row">
+								<span class="list-row__title">
+									<a href={item.url}>{item.title}</a>
+									<span class="media-type"> — {item.type}</span>
+									{item.note && <span class="media-note">{item.note}</span>}
+								</span>
+								<time class="list-row__meta" datetime={item.date}>
+									{formatDateShort(new Date(item.date))}
+								</time>
+							</li>
+						))
+					}
+				</ul>
+			)
+		}
+	</section>
+
+	<footer class="site-footer">{siteConfig.location}</footer>
+</BaseLayout>

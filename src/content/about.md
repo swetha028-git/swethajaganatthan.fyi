@@ -1,0 +1,3 @@
+I am based in **Chennai, India**, with a BTech in AI and Data Science from Easwari Engineering College (SRM).
+
+At **Kawan**, an Amsterdam-based social discovery startup, I work on UX research with the founder—running usability tests and turning product feedback into clearer product decisions. Alongside that, I am focused on breaking into **venture capital**, with a particular interest in Nordic and Baltic deep tech funds. In Chennai I help organize developer communities (**CodeOn JVM**, **FlutterFlow**) and have secured corporate sponsorships through cold outreach, including **AWS** and **Red Bull**.

@@ -1,0 +1,19 @@
+{
+  "name": "Swetha",
+  "intro": "UX research at Kawan in Amsterdam. Interested in Nordic and Baltic deep tech venture capital.",
+  "location": "Chennai, India",
+  "links": [
+    {
+      "label": "Email",
+      "url": "mailto:YOUR_EMAIL@example.com"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/YOUR_LINKEDIN_HANDLE"
+    },
+    {
+      "label": "X",
+      "url": "https://x.com/YOUR_X_HANDLE"
+    }
+  ]
+}

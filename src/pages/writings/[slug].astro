@@ -1,0 +1,32 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { siteConfig } from '../../lib/content';
+import { formatDateShort } from '../../lib/format';
+
+export async function getStaticPaths() {
+	const writings = await getCollection('writings');
+	return writings.map((entry) => ({
+		params: { slug: entry.id },
+		props: { entry },
+	}));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const description = entry.data.summary ?? entry.data.title;
+---
+
+<BaseLayout title={entry.data.title} siteName={siteConfig.name} description={description}>
+	<a class="back-link" href="/#writings">← Writings</a>
+	<header class="writing-header">
+		<h1>{entry.data.title}</h1>
+		<p class="writing-date">
+			<time datetime={entry.data.date.toISOString()}>{formatDateShort(entry.data.date)}</time>
+		</p>
+		{entry.data.summary && <p class="writing-summary">{entry.data.summary}</p>}
+	</header>
+	<article class="prose">
+		<Content />
+	</article>
+</BaseLayout>

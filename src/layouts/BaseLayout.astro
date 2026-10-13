@@ -1,0 +1,36 @@
+---
+import '../styles/global.css';
+
+interface Props {
+	title: string;
+	description?: string;
+	siteName?: string;
+}
+
+const { title, description = '', siteName = 'Swetha' } = Astro.props;
+const siteUrl = Astro.site?.href?.replace(/\/$/, '') ?? '';
+const rssHref = siteUrl ? `${siteUrl}/rss.xml` : '/rss.xml';
+const fullTitle = title === siteName ? siteName : `${title} · ${siteName}`;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{fullTitle}</title>
+		{description && <meta name="description" content={description} />}
+		<meta property="og:title" content={fullTitle} />
+		{description && <meta property="og:description" content={description} />}
+		<meta property="og:type" content="website" />
+		{siteUrl && <meta property="og:url" content={siteUrl} />}
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="alternate" type="application/rss+xml" title="Writings" href={rssHref} />
+	</head>
+	<body>
+		<div class="wrap">
+			<slot />
+		</div>
+	</body>
+</html>

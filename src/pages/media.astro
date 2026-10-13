@@ -1,0 +1,48 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { mediaItems, siteConfig } from '../lib/content';
+import { formatDateShort, youtubeVideoId } from '../lib/format';
+---
+
+<BaseLayout
+	title="Podcasts & Videos"
+	siteName={siteConfig.name}
+	description="Talks, podcasts, videos, and interviews."
+>
+	<a class="back-link" href="/#media">← Home</a>
+	<header class="site-header" style="margin-bottom: 2rem;">
+		<h1 style="font-size: 1.5rem;">Podcasts &amp; Videos</h1>
+	</header>
+
+	{
+		mediaItems.map((item) => {
+			const videoId =
+				item.embedOnMediaPage && (item.type === 'video' || item.type === 'talk')
+					? youtubeVideoId(item.url)
+					: null;
+			return (
+				<article class="media-page-item">
+					<h2 style="margin: 0 0 0.35rem; font-size: 1.15rem; font-weight: 400;">
+						<a href={item.url}>{item.title}</a>
+					</h2>
+					<p class="writing-date" style="margin: 0;">
+						<span class="media-type">{item.type}</span>
+						{' · '}
+						<time datetime={item.date}>{formatDateShort(new Date(item.date))}</time>
+					</p>
+					{item.note && <p class="media-note" style="margin-top: 0.5rem;">{item.note}</p>}
+					{videoId && (
+						<iframe
+							class="media-embed"
+							src={`https://www.youtube.com/embed/${videoId}`}
+							title={item.title}
+							loading="lazy"
+							allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+							allowfullscreen
+						/>
+					)}
+				</article>
+			);
+		})
+	}
+</BaseLayout>
