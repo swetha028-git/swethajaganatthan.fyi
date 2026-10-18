@@ -27,6 +27,9 @@ const fullTitle = title === siteName ? siteName : `${title} · ${siteName}`;
 		{siteUrl && <meta property="og:url" content={siteUrl} />}
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="alternate" type="application/rss+xml" title="Writings" href={rssHref} />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet" />
 	</head>
 	<body>
 		<div class="wrap">

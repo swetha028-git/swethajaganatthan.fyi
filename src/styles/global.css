@@ -5,8 +5,7 @@
 	--accent: #1a5f4a;
 	--border: #d8d8d4;
 	--max-width: 40rem;
-	--font-serif: Georgia, 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino,
-		'Times New Roman', Times, serif;
+	--font-serif: 'Roboto Mono', monospace;
 }
 
 @media (prefers-color-scheme: dark) {
