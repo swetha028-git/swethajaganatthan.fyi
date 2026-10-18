@@ -1,0 +1,280 @@
+---
+interface Props {
+	name?: string;
+}
+
+const { name = 'Swetha' } = Astro.props;
+---
+
+<div class="voice-narrator-root" data-name={name}>
+	<button
+		id="voice-narrate-btn"
+		class="voice-btn"
+		type="button"
+		aria-label="Listen to intro narration"
+		title="Listen to intro narration"
+	>
+		<span class="voice-icon-slot" aria-hidden="true">
+			<svg class="icon-speaker" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+				<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+				<path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+				<path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+			</svg>
+			<span class="icon-equalizer" style="display: none;">
+				<span class="eq-bar"></span>
+				<span class="eq-bar"></span>
+				<span class="eq-bar"></span>
+			</span>
+		</span>
+		<span id="voice-btn-label">Listen</span>
+	</button>
+</div>
+
+<style>
+	.voice-narrator-root {
+		display: inline-flex;
+		align-items: center;
+	}
+
+	.voice-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.45rem;
+		padding: 0.2rem 0.6rem;
+		font-family: inherit;
+		font-size: 0.78rem;
+		letter-spacing: 0.04em;
+		color: var(--muted);
+		background: transparent;
+		border: 1px solid var(--border);
+		border-radius: 9999px;
+		cursor: pointer;
+		transition: all 0.2s ease;
+		user-select: none;
+	}
+
+	.voice-btn:hover {
+		color: var(--accent);
+		border-color: var(--accent);
+		background: color-mix(in srgb, var(--accent) 8%, transparent);
+	}
+
+	.voice-btn.is-playing {
+		color: var(--accent);
+		border-color: var(--accent);
+		background: color-mix(in srgb, var(--accent) 12%, transparent);
+	}
+
+	.voice-icon-slot {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		line-height: 1;
+	}
+
+	.icon-speaker {
+		transition: transform 0.2s ease;
+	}
+
+	.voice-btn:hover .icon-speaker {
+		transform: scale(1.1);
+	}
+
+	.icon-equalizer {
+		display: inline-flex;
+		align-items: flex-end;
+		gap: 2px;
+		height: 11px;
+	}
+
+	.eq-bar {
+		display: block;
+		width: 2px;
+		background: currentColor;
+		border-radius: 1px;
+		animation: eq-bounce 0.8s ease-in-out infinite alternate;
+	}
+
+	.eq-bar:nth-child(1) {
+		height: 5px;
+		animation-delay: 0s;
+	}
+	.eq-bar:nth-child(2) {
+		height: 10px;
+		animation-delay: 0.25s;
+	}
+	.eq-bar:nth-child(3) {
+		height: 7px;
+		animation-delay: 0.5s;
+	}
+
+	@keyframes eq-bounce {
+		0% {
+			height: 3px;
+		}
+		100% {
+			height: 11px;
+		}
+	}
+</style>
+
+<script>
+	function initVoiceNarrator() {
+		const btn = document.getElementById('voice-narrate-btn');
+		const label = document.getElementById('voice-btn-label');
+		const root = document.querySelector('.voice-narrator-root');
+		if (!btn || !label || !root) return;
+
+		const speakerIcon = btn.querySelector('.icon-speaker') as HTMLElement | null;
+		const equalizerIcon = btn.querySelector('.icon-equalizer') as HTMLElement | null;
+		const name = root.getAttribute('data-name') || 'Swetha';
+
+		let isPlaying = false;
+		let synth: SpeechSynthesis | null = typeof window !== 'undefined' && 'speechSynthesis' in window ? window.speechSynthesis : null;
+		let sentences: string[] = [];
+		let sentenceIndex = 0;
+
+		// Optional custom audio file support (/voice-intro.mp3 in public folder)
+		const customAudio = new Audio('/voice-intro.mp3');
+		let hasCustomAudio = false;
+
+		customAudio.addEventListener('canplaythrough', () => {
+			hasCustomAudio = true;
+		});
+		customAudio.addEventListener('ended', () => {
+			setPlaying(false);
+		});
+		customAudio.addEventListener('error', () => {
+			hasCustomAudio = false;
+		});
+
+		function setPlaying(playing: boolean) {
+			isPlaying = playing;
+			btn?.classList.toggle('is-playing', playing);
+			btn?.setAttribute('aria-pressed', playing ? 'true' : 'false');
+
+			if (label) {
+				label.textContent = playing ? 'Stop' : 'Listen';
+			}
+			if (speakerIcon) {
+				speakerIcon.style.display = playing ? 'none' : 'inline-block';
+			}
+			if (equalizerIcon) {
+				equalizerIcon.style.display = playing ? 'inline-flex' : 'none';
+			}
+		}
+
+		function getNarrationText(): string {
+			const aboutProse = document.querySelector('#about .prose');
+			const introTagline = document.querySelector('.site-header .intro');
+
+			let parts: string[] = [];
+			parts.push(`Hi, I'm ${name}.`);
+
+			if (introTagline && introTagline.textContent) {
+				parts.push(introTagline.textContent.trim());
+			}
+
+			if (aboutProse && aboutProse.textContent) {
+				parts.push(aboutProse.textContent.trim());
+			}
+
+			const fullText = parts.join(' ').replace(/\s+/g, ' ').trim();
+			return fullText;
+		}
+
+		function speakNextSentence() {
+			if (!isPlaying || !synth) return;
+
+			if (sentenceIndex >= sentences.length) {
+				setPlaying(false);
+				return;
+			}
+
+			const text = sentences[sentenceIndex];
+			const utterance = new SpeechSynthesisUtterance(text);
+
+			const voices = synth.getVoices();
+			// Choose a clear, natural English voice
+			const preferredVoice =
+				voices.find((v) => v.lang.startsWith('en') && (v.name.includes('Natural') || v.name.includes('Google') || v.name.includes('Samantha') || v.name.includes('Jenny') || v.name.includes('Victoria'))) ||
+				voices.find((v) => v.lang.startsWith('en')) ||
+				voices[0];
+
+			if (preferredVoice) {
+				utterance.voice = preferredVoice;
+			}
+			utterance.rate = 0.95;
+			utterance.pitch = 1.0;
+
+			utterance.onend = () => {
+				sentenceIndex++;
+				speakNextSentence();
+			};
+
+			utterance.onerror = (e) => {
+				// Don't error out on intentional cancellation
+				if (e.error !== 'interrupted' && e.error !== 'canceled') {
+					console.warn('SpeechSynthesis error:', e);
+				}
+				setPlaying(false);
+			};
+
+			synth.speak(utterance);
+		}
+
+		function stop() {
+			if (hasCustomAudio && !customAudio.paused) {
+				customAudio.pause();
+				customAudio.currentTime = 0;
+			}
+			if (synth) {
+				synth.cancel();
+			}
+			setPlaying(false);
+		}
+
+		function start() {
+			if (hasCustomAudio) {
+				customAudio.play().then(() => {
+					setPlaying(true);
+				}).catch(() => {
+					playWithSpeechSynthesis();
+				});
+			} else {
+				playWithSpeechSynthesis();
+			}
+		}
+
+		function playWithSpeechSynthesis() {
+			if (!synth) {
+				alert('Speech narration is not supported by your browser.');
+				return;
+			}
+
+			const text = getNarrationText();
+			if (!text) return;
+
+			// Split into sentences for natural pacing and Chromium stability
+			const matched = text.match(/[^.!?]+[.!?]+(\s|$)|[^.!?]+$/g);
+			sentences = matched && matched.length > 0 ? matched : [text];
+			sentenceIndex = 0;
+
+			synth.cancel();
+			setPlaying(true);
+			speakNextSentence();
+		}
+
+		btn.addEventListener('click', () => {
+			if (isPlaying) {
+				stop();
+			} else {
+				start();
+			}
+		});
+
+		window.addEventListener('beforeunload', stop);
+	}
+
+	initVoiceNarrator();
+</script>
