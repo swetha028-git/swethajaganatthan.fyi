@@ -34,8 +34,8 @@ body {
 	background: var(--bg);
 	color: var(--text);
 	font-family: var(--font-serif);
-	font-size: 1.2rem;
-	line-height: 1.6;
+	font-size: 0.95rem;
+	line-height: 1.65;
 }
 
 img,
@@ -61,21 +61,22 @@ a:focus-visible {
 }
 
 .site-header {
-	margin-bottom: 3rem;
+	margin-bottom: 2.5rem;
 }
 
 .site-header h1 {
 	margin: 0 0 0.75rem;
-	font-size: 1.75rem;
-	font-weight: 400;
-	letter-spacing: -0.02em;
+	font-size: 1.4rem;
+	font-weight: 500;
+	letter-spacing: -0.01em;
 	line-height: 1.25;
 }
 
 .intro {
 	margin: 0;
 	color: var(--muted);
-	font-size: 1.05rem;
+	font-size: 0.92rem;
+	line-height: 1.6;
 }
 
 .contact {
@@ -85,7 +86,7 @@ a:focus-visible {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 0.35rem 0.65rem;
-	font-size: 0.95rem;
+	font-size: 0.85rem;
 }
 
 .contact li:not(:last-child)::after {
