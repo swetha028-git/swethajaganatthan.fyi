@@ -34,7 +34,7 @@ body {
 	background: var(--bg);
 	color: var(--text);
 	font-family: var(--font-serif);
-	font-size: 1.125rem;
+	font-size: 1.2rem;
 	line-height: 1.6;
 }
 
@@ -96,18 +96,6 @@ a:focus-visible {
 
 section {
 	margin-top: 2.75rem;
-}
-
-.section-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin-bottom: 1rem;
-	gap: 1rem;
-}
-
-.section-header h2 {
-	margin: 0;
 }
 
 section h2 {

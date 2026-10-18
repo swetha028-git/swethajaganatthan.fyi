@@ -1,5 +1,5 @@
 {
-  "name": "Swetha",
+  "name": "Swetha Jaganatthan",
   "intro": "UX research at Kawan in Amsterdam. Interested in Nordic and Baltic deep tech venture capital.",
   "location": "Chennai, India",
   "links": [
@@ -8,12 +8,16 @@
       "url": "mailto:swethajaganathan028@gmail.com"
     },
     {
-      "label": "LinkedIn",
+      "label": "Linkedin",
       "url": "https://www.linkedin.com/in/swetha-jaganatthan/"
     },
     {
       "label": "X",
       "url": "https://x.com/Swetha_028"
+    },
+    {
+      "label": "GitHub",
+      "url": "https://github.com/swetha028-git"
     }
   ]
 }
