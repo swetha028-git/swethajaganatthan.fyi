@@ -6,6 +6,9 @@
 	--border: #d8d8d4;
 	--max-width: 40rem;
 	--font-serif: 'Roboto Mono', monospace;
+	--orb-highlight: rgba(255, 255, 255, 0.9);
+	--orb: rgba(92, 176, 146, 0.72);
+	--orb-mid: rgba(26, 95, 74, 0.28);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -15,6 +18,9 @@
 		--muted: #9a9a94;
 		--accent: #6ecfad;
 		--border: #33332f;
+		--orb-highlight: rgba(214, 255, 236, 0.7);
+		--orb: rgba(86, 196, 156, 0.5);
+		--orb-mid: rgba(18, 72, 54, 0.35);
 	}
 }
 
@@ -38,6 +44,26 @@ body {
 	line-height: 1.65;
 }
 
+.backdrop-orb {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	z-index: 0;
+	width: min(26rem, 72vw);
+	aspect-ratio: 1;
+	transform: translate(-50%, -50%);
+	border-radius: 50%;
+	background: radial-gradient(
+		circle at 34% 32%,
+		var(--orb-highlight) 0%,
+		var(--orb) 26%,
+		var(--orb-mid) 52%,
+		transparent 72%
+	);
+	filter: blur(10px);
+	pointer-events: none;
+}
+
 img,
 video,
 iframe {
@@ -55,6 +81,8 @@ a:focus-visible {
 }
 
 .wrap {
+	position: relative;
+	z-index: 1;
 	width: min(100% - 2.5rem, var(--max-width));
 	margin-inline: auto;
 	padding-block: 3.5rem 4rem;
